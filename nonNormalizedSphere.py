@@ -100,4 +100,4 @@ def animate(num_iters, N, D):
     ax.set_zlabel("Z")
     plt.show()
 
-animate(1000, 12, 3)
+animate(1000, 15, 3)
