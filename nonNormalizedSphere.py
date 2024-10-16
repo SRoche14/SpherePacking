@@ -16,8 +16,7 @@ class Points(nn.Module):
         self.points = nn.Parameter(torch.randn(N, D, device=device))
 
     def normalize_points(self):
-       # return self.points / self.points.norm(dim=-1, p=2, keepdim=True)
-       return self.points
+       return self.points / self.points.norm(dim=-1, p=2, keepdim=True)
 
     def loss(self):
         normalized_points = self.normalize_points()
@@ -33,14 +32,14 @@ class Points(nn.Module):
             torch.ones(self.N, self.N, dtype=bool, device=device), diagonal=1
         )
         #
-        loss = torch.median(1 / (distance[mask] ** 2 + 1e-6)) # changed torch.mean to torch.median
+        loss = torch.mean(1 / (distance[mask] ** 2 + 1e-6)) # changed torch.mean to torch.median
         return loss
 
 
 def optimize(N, D):
     points = Points(N, D).to(device)
 
-    optim = torch.optim.SGD(points.parameters(), lr=1e-1) # changed Adam to SGD
+    optim = torch.optim.Adam(points.parameters(), lr=1e-1) # changed Adam to SGD
 
     while True:
         optim.zero_grad()
@@ -100,4 +99,4 @@ def animate(num_iters, N, D):
     ax.set_zlabel("Z")
     plt.show()
 
-animate(1000, 15, 3)
+animate(1000, 7, 3)
